@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.0.1...v1.0.2) (2024-03-18)
+
+
+### Bug Fixes
+
+* replaced keyword spaces with hyphens and lowercase letters only ([c5af411](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/c5af411ccb9158c634f7a68fb941069287b95454))
+
 ## [1.0.1](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.0.0...v1.0.1) (2024-03-18)
 
 
