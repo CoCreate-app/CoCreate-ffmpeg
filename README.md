@@ -1,13 +1,21 @@
 # CoCreate-ffmpeg
 
-A convenient chain handler allows user to chain multiple CoCreate components together. When one action is complete next one will start. The sequence goes untill all ffmpeg completed. Grounded on Vanilla javascript, easily configured using HTML5 attributes and/or JavaScript API. Take it for a spin in our [playground!](https://cocreate.app/docs/ffmpeg)
+CoCreate-ffmpeg is a versatile media processing module designed to simplify the complex world of video and audio manipulation through an intuitive JavaScript API and HTML attribute-driven interface. Built on the robust capabilities of FFmpeg, this module allows developers and content creators to effortlessly transcode, resize, segment, and perform various other media operations directly within web applications.
 
 ![minified](https://img.badgesize.io/https://cdn.cocreate.app/ffmpeg/latest/CoCreate-ffmpeg.min.js?style=flat-square&label=minified&color=orange)
 ![gzip](https://img.badgesize.io/https://cdn.cocreate.app/ffmpeg/latest/CoCreate-ffmpeg.min.js?compression=gzip&style=flat-square&label=gzip&color=yellow)
 ![brotli](https://img.badgesize.io/https://cdn.cocreate.app/ffmpeg/latest/CoCreate-ffmpeg.min.js?compression=brotli&style=flat-square&label=brotli)
-![GitHub latest release](https://img.shields.io/github/v/release/CoCreate-app/CoCreate-action?style=flat-square)
-![License](https://img.shields.io/github/license/CoCreate-app/CoCreate-action?style=flat-square)
+![GitHub latest release](https://img.shields.io/github/v/release/CoCreate-app/CoCreate-ffmpeg?style=flat-square)
+![License](https://img.shields.io/github/license/CoCreate-app/CoCreate-ffmpeg?style=flat-square)
 ![Hiring](https://img.shields.io/static/v1?style=flat-square&label=&message=Hiring&color=blueviolet)
+
+## Features
+
+-   **Easy Transcoding**: Convert videos and audios to different formats seamlessly, ensuring compatibility across devices and browsers.
+-   **Media Segmentation**: Prepare media for streaming by segmenting videos and audios into manageable chunks, perfect for HTTP Live Streaming (HLS).
+-   **Flexible Processing**: Resize, trim, and apply filters to your media files with simple commands or HTML attributes.
+-   **HTML Attribute Integration**: Use custom HTML attributes to manipulate media directly in your markup, making it accessible for developers of all skill levels.
+-   **JavaScript API**: For more advanced use cases, the comprehensive JavaScript API provides the flexibility and power needed for complex media processing tasks.
 
 ![CoCreate-ffmpeg](https://cdn.cocreate.app/docs/CoCreate-ffmpeg.gif)
 
