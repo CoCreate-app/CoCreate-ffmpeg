@@ -13,15 +13,32 @@
     </head>
     <body>
         <input
-            id="fileInput"
             type="file"
             accept="video/mp4"
-            segment-size=""
-            segment-duration="" />
+            segment-duration="5"
+            processor="ffmpeg" />
+
+        <form>
+            <input
+                type="file"
+                processor="ffmpeg"
+                accept="video/mp4"
+                segment-duration="5"
+                path="/assets/test" />
+            <button actions="upload">upload</button>
+        </form>
+
+        <video
+            stream="https://dev.yelloworacle.com/assets/test/invideo-ai-720 Find Your Perfect Career Path with Yello 2024-02-03 (1).mp4"
+            controls
+            width="250"></video>
+
         <!-- <input id="fileInput" type="file" accept="video/mp4" processor="ffmpeg"/> -->
         <span id="progress"></span>
-        <script src="../dist/CoCreate-ffmpeg.js"></script>
+        <!-- <script src="../dist/CoCreate-ffmpeg.js"></script> -->
         <!-- <script src="../dist/main.js"></script> -->
         <!-- <script src="https://CoCreate.app/dist/CoCreate.js"></script> -->
+        <!-- <script src="../../../CoCreateJS/dist/CoCreate.min.js"></script> -->
+        <script src="../../../CoCreateJS/dist/CoCreate.js"></script>
     </body>
 </html>
