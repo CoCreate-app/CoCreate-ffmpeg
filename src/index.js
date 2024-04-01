@@ -1,10 +1,64 @@
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile } from '@ffmpeg/util';
+import Observer from '@cocreate/observer';
+import Actions from '@cocreate/actions';
 
 const ffmpeg = new FFmpeg();
 
-async function processFile(file, segmentDuration, segmentSize, bitrate, resolution, format) {
+const selector = "[processor='ffmpeg']";
+
+async function init(elements) {
+    console.log('loadddddd')
+    if (!ffmpeg.loaded)
+        ffmpeg.load();
+
+    if (!elements)
+        elements = document.querySelectorAll(selector)
+    else if (!Array.isArray(elements))
+        elements = [elements]
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].processFile = async (file, segmentDuration, segmentSize, bitrate, resolution, format, title) => {
+            return await processFile(file, segmentDuration, segmentSize, bitrate, resolution, format, title, elements[i])
+        }
+    }
+}
+
+async function processFile(file, segmentDuration, segmentSize, bitrate, resolution, format, title, element) {
     try {
+        if (element) {
+            if (!segmentDuration) {
+                segmentDuration = element.getAttribute('segment-duration');
+            }
+
+            if (!segmentSize) {
+                segmentSize = element.getAttribute('segment-size');
+            }
+
+            if (!bitrate) {
+                bitrate = element.getAttribute('bitrate');
+            }
+
+            if (!resolution) {
+                resolution = element.getAttribute('resolution');
+                if (resolution) {
+                    let parts = resolution.split('x');
+                    let width = parseInt(parts[0], 10);
+                    let height = parseInt(parts[1], 10);
+                    resolution = { width, height }
+                }
+            }
+
+            if (!format) {
+                format = element.getAttribute('format');
+            }
+            if (!title) {
+                title = element.getAttribute('title');
+            }
+        }
+
+
+        const url = URL.createObjectURL(file);
+
         if (!ffmpeg.loaded) {
             await ffmpeg.load();
             // await ffmpeg.load({
@@ -13,18 +67,15 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
             console.log('ffmpeg succesfully loaded')
         }
 
-        const url = URL.createObjectURL(file);
-
         await ffmpeg.writeFile(file.name, await fetchFile(url));
 
         ffmpeg.on("progress", ({ progress, time }) => {
-            document.getElementById('progress').innerHTML = `${progress * 100} %, time: ${time / 1000000} s`;
+            document.getElementById('progress').innerHTML = `${progress * 100} %, time: ${time / 1000000} s`
         });
 
         const segmentNames = []
-        let metadata = { duration: 0, codec: '', resolution: { width: 0, height: 0 }, bitrate: '' };
 
-        let type = file.type
+        let type = file.type, codecs
         if (format) {
             // Ensure the format is supported and has defined options
             if (!contentType[format]) {
@@ -32,7 +83,14 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
             }
 
             type = contentType[format].type;
+            codecs = contentType[format].codecs
+
+        } else {
+            const fileExtension = getFormat(file)
+            codecs = contentType[fileExtension].codecs
         }
+
+        let metadata = { duration: 0, codecs, resolution: '', bitrate: '', type };
 
         ffmpeg.on("log", ({ message }) => {
             let match
@@ -47,38 +105,31 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
                 const seconds = parseInt(match[3], 10) + parseFloat('0.' + match[4]);
                 metadata.duration = hours * 3600 + minutes * 60 + seconds;
             }
-            // Video Stream (Codec & Resolution)
-            if ((match = message.match(/Video: ([^\s]+) .*, (\d+)x(\d+)/))) {
-                metadata.codec = match[1];
-                metadata.resolution.width = parseInt(match[2], 10);
-                metadata.resolution.height = parseInt(match[3], 10);
+            // Video Stream Resolution
+            if (!metadata.resolution && (match = message.match(/Video: ([^\s]+) .*, (\d+)x(\d+)/))) {
+                metadata.resolution = parseInt(match[2], 10) + 'x' + parseInt(match[3], 10);
             }
             // Bitrate
-            if ((match = message.match(/bitrate: (\d+) kb\/s/))) {
+            if (!metadata.bitrate && (match = message.match(/bitrate: (\d+) kb\/s/))) {
                 metadata.bitrate = `${match[1]}kbps`;
             }
         })
 
         // Prepare and exec the FFmpeg command
-        let command = await getCommand(file, segmentDuration, segmentSize, bitrate, resolution, format)
+        let command = await getCommand(file, segmentDuration, segmentSize, bitrate, resolution, format, title)
         await ffmpeg.exec(command);
 
         let playlist = null
-        const streamConfig = {
-            title: "Video Title",
-            totalDuration: 0,
-            'content-type': "video/mp4",
-            segments: []
-        }
-
         const segments = []
 
         if (segmentDuration || segmentSize) {
             let start = 0
             playlist = {
-                title: "Video Title",
-                totalDuration: 0,
-                'content-type': "video/mp4",
+                title,
+                length: 0,
+                'content-type': type,
+                codecs,
+                resolution: metadata.resolution
             }
 
             if (format === 'hls') {
@@ -87,6 +138,7 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
             } else {
                 playlist.segments = []
             }
+
 
             // Handle the segmented files
             for (let i = 0; i < segmentNames.length; i++) {
@@ -99,7 +151,7 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
                 segments.push({ name: segmentNames[i], src, ...metadata, duration, size, start, end })
 
                 if (format !== 'hls') {
-                    streamConfig.segments.push({ name: segmentNames[i], src: `/${segmentNames[i]}`, ...metadata, duration, size, start, end })
+                    playlist.segments.push({ name: segmentNames[i], src: `/${segmentNames[i]}`, ...metadata, duration, size, start, end })
                 }
 
                 start += duration
@@ -107,9 +159,7 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
                 ffmpeg.deleteFile(segmentNames[i]);
             }
 
-            playlist.totalDuration = start
-
-            streamConfig.totalDuration = start
+            playlist.length = start
 
         } else {
             let src = await ffmpeg.readFile(file.name);
@@ -118,7 +168,7 @@ async function processFile(file, segmentDuration, segmentSize, bitrate, resoluti
 
         ffmpeg.deleteFile(file.name);
 
-        return { file, streamConfig, playlist, segments }
+        return { file, playlist, segments }
     } catch (error) {
         console.log(error)
     }
@@ -226,48 +276,57 @@ const contentType = {
         type: 'video/mp4',
         videoCodec: 'libx264',
         audioCodec: 'aac',
-        extraOptions: ['-movflags', '+faststart'],
+        codecs: 'avc1.42E01E, mp4a.40.2',
+        extraOptions: ['-movflags', '+faststart']
     },
     webm: {
         type: 'video/webm',
         videoCodec: 'libvpx-vp9',
         audioCodec: 'libvorbis',
+        codecs: 'vp09.00.10.08, vorbis'
     },
     mkv: {
         type: 'video/x-matroska',
         videoCodec: 'libx265',
         audioCodec: 'aac',
+        codecs: 'hvc1.1.6.L93.B0, mp4a.40.2'
     },
     avi: {
         type: 'video/x-msvideo',
         videoCodec: 'mpeg4',
         audioCodec: 'libmp3lame',
+        codecs: 'mp4v.20.8, mp4a.40.2'
     },
     mov: {
         type: 'video/quicktime',
         videoCodec: 'libx264',
         audioCodec: 'aac',
+        codecs: 'avc1.42E01E, mp4a.40.2'
     },
     flv: {
         type: 'video/x-flv',
         videoCodec: 'flv',
         audioCodec: 'mp3',
+        codecs: 'flv, mp3'
     },
     ogg: {
         type: 'video/ogg',
         videoCodec: 'libtheora',
         audioCodec: 'libvorbis',
+        codecs: 'theora, vorbis'
     },
     mpeg: {
         type: 'video/mpeg',
         videoCodec: 'mpeg2video',
         audioCodec: 'mp2',
+        codecs: 'mp2v, mp4a.40.2'
     },
     hls: {
         type: 'application/vnd.apple.mpegurl', // For .m3u8 playlist files
         segmentContentType: 'mp2t', // For .ts segment files
         videoCodec: 'libx264',
         audioCodec: 'aac',
+        codecs: 'avc1.42E01E, mp4a.40.2',
         extraOptions: ['-hls_time', '10', '-hls_list_size', '0', '-f', 'hls']
     },
 
@@ -275,38 +334,33 @@ const contentType = {
     mp3: {
         type: 'audio/mpeg',
         audioCodec: 'libmp3lame',
+        codecs: 'mp3'
     },
     aac: {
         type: 'audio/aac',
         audioCodec: 'aac',
+        codecs: 'mp4a.40.2'
     },
     oggAudio: {
         type: 'audio/ogg',
         audioCodec: 'libvorbis',
+        codecs: 'vorbis'
     },
     opus: {
         type: 'audio/opus',
         audioCodec: 'libopus',
+        codecs: 'opus'
     },
     wav: {
         type: 'audio/wav',
         audioCodec: 'pcm_s16le',
+        codecs: '1', // PCM audio in WAV container
     },
 };
 
-// Example usage (you'll likely tie this to an event listener on a file input)
-document.getElementById('fileInput').addEventListener('change', async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const targetSegmentSizeBytes = 10 * 1024 * 1024; // 10MB in bytes
-        let segment = await processFile(file, 4);
-        console.log('test2')
-    }
-});
-
 const streamConfigExample = {
     title: "Video Title",
-    totalDuration: 3600, // Total duration of the video in seconds
+    length: 3600, // Video duration in seconds
     'content-type': "video/mp4",
     segments: [
         {
@@ -326,4 +380,30 @@ const streamConfigExample = {
     ]
 }
 
-// init()
+init()
+
+Observer.init({
+    name: 'CoCreateFfmpeg',
+    observe: ['addedNodes'],
+    target: selector,
+    callback: function (mutation) {
+        init(mutation.target)
+    }
+});
+
+Actions.init([
+    {
+        name: ["processFile"],
+        callback: (action) => {
+            // processFile(file, segmentDuration, segmentSize, bitrate, resolution, format, element)
+
+            document.dispatchEvent(new CustomEvent(action.name, {
+                detail: {}
+            }));
+
+        }
+    }
+])
+
+
+export { init, processFile, getMediaInfo }
