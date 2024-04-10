@@ -395,7 +395,11 @@ Actions.init([
     {
         name: ["processFile"],
         callback: (action) => {
-            // processFile(file, segmentDuration, segmentSize, bitrate, resolution, format, element)
+            let elements = queryElements({ element: action.element, prefix: 'process' })
+
+            for (let i = 0; i < elements.length; i++) {
+                // processFile(file, segmentDuration, segmentSize, bitrate, resolution, format, element)
+            }
 
             document.dispatchEvent(new CustomEvent(action.name, {
                 detail: {}
