@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.0...v1.1.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* bump cocreate dependencies ([e058e8e](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/e058e8ec1fb987ae34aea4edc79b454e74a2f554))
+
 # [1.1.0](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.0.3...v1.1.0) (2024-04-26)
 
 
