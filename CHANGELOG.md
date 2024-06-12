@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.1...v1.1.2) (2024-06-12)
+
+
+### Bug Fixes
+
+* bump cocreate dependencies ([7e79be7](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/7e79be760ec2973fb05461c14c4ea77a4a4a99e9))
+* svg icon class ([7eaf179](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/7eaf17998e413dbb17a1caee9f5b239a3114862e))
+
 ## [1.1.1](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.0...v1.1.1) (2024-04-29)
 
 
