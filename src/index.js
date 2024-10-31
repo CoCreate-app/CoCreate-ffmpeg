@@ -385,7 +385,7 @@ init()
 Observer.init({
     name: 'CoCreateFfmpeg',
     observe: ['addedNodes'],
-    target: selector,
+    selector,
     callback: function (mutation) {
         init(mutation.target)
     }
