@@ -1,6 +1,6 @@
 {
   "name": "@cocreate/ffmpeg",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A media processing module using FFmpeg for video/audio manipulation via a JavaScript API and HTML attributes. Supports transcoding, resizing, and more, simplifying media tasks for web applications.",
   "keywords": [
     "ffmpeg",

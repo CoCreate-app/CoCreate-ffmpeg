@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.2...v1.2.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* observer taget has been renamed to selector ([c9e1b14](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/c9e1b14cfc4345e3d9eb73aede9999baa3204c75))
+* pretier.config.js and file formating ([4c3b1a1](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/4c3b1a1cf3ce2eaab28d1b95d89bbec7a7725390))
+
+
+### Features
+
+* add prettier.config.js and format files ([6defcbc](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/6defcbc53cb244cc6fefeade2a7e07d361067673))
+* add prettier.config.js and format files ([c7c7b2e](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/c7c7b2ef1d2faf8d14111eaf9fdd22628b6e8339))
+
 ## [1.1.2](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.1...v1.1.2) (2024-06-12)
 
 
