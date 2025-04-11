@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.2.0...v1.2.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* dispatch end event on action element rather than document ([641207e](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/641207e7771a5d6c571c242a87500f76c85f5424))
+* update observer observe param to type and and attributeName to attributeFilter ([1fe47f9](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/1fe47f9206bcfbe4d3c123ff3912ac58c879a8c5))
+
 # [1.2.0](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.1.2...v1.2.0) (2024-11-04)
 
 
