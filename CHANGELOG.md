@@ -1,3 +1,14 @@
+## [1.2.2](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.2.1...v1.2.2) (2025-05-01)
+
+
+### Bug Fixes
+
+* added css-loader ([6a47b39](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/6a47b39af58a6a54e863a8d9e838201c9b3cb56b))
+* update [@cocreate](https://github.com/cocreate) dependencies ([8968d7b](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/8968d7b9907323b9f69d41fb48a06e61f8cc8874))
+* update query attributes ([a098c55](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/a098c550edc2bbc447ba4ccad6a78b38a8e19f53))
+* updated cocreate modules versions ([f8e790a](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/f8e790a2a12754647c5a27e10dc20bb5ac1348c3))
+* webpack.config and devdependencies ([7f45577](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/7f4557723fa29b2d35b5cddcb2bc9eb23abea92c))
+
 ## [1.2.1](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.2.0...v1.2.1) (2025-04-11)
 
 
