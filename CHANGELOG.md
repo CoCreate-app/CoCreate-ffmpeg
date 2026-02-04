@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.2.2...v1.2.3) (2026-02-04)
+
+
+### Bug Fixes
+
+* update worklow ([4d11819](https://github.com/CoCreate-app/CoCreate-ffmpeg/commit/4d1181951e05cf7cc2cf84f4ce1fd2838e68882d))
+
 ## [1.2.2](https://github.com/CoCreate-app/CoCreate-ffmpeg/compare/v1.2.1...v1.2.2) (2025-05-01)
 
 
